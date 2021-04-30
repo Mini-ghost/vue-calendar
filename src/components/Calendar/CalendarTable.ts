@@ -7,6 +7,8 @@ import type {
 } from 'vue'
 import type { PropValidator } from 'vue/types/options'
 
+import { genFormatter } from '@/utils/genFormatter'
+
 const fill = (
   string: number | string, 
   length: number = 2, 
@@ -27,11 +29,7 @@ const fill = (
   return fillText + string
 }
 
-const { format } =  new Intl.DateTimeFormat('en-US', { 
-  day: 'numeric', 
-  timeZone: 'UTC' 
-})
-const formatter = (date: string) => format(new Date(date))
+const formatter = genFormatter('en-US', { day: 'numeric', timeZone: 'UTC' })
 
 export default Vue.extend({
   name: 'CalendarTable',
