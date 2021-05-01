@@ -1,7 +1,7 @@
 <template>
   <div>
     <Calendar 
-      :value="new Date(year, month)"
+      v-model="value"
       :show-adjacent-months="showAdjacentMonths"
     />
   </div>
@@ -20,9 +20,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      year: 2021,
-      month: 3,
-      showAdjacentMonths: false
+      value: new Date(),
+      showAdjacentMonths: false,
     }
   }
 })
