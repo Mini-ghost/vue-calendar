@@ -84,8 +84,8 @@ export default Vue.extend({
       }
 
       // 產生這個月的日期
-      for(let i = 1; i < 31; i++) {
-        const date = `${this.valueYear}-${fill(this.valueMonth)}-${fill(i)}`
+      for(let i = 1; i <= 31; i++) {
+        const date = `${this.valueYear}-${fill(this.valueMonth + 1)}-${fill(i)}`
 
         row.push(this.$createElement('td', [formatter(date)]))
 
