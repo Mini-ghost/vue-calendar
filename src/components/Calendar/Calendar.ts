@@ -5,6 +5,7 @@ import type { VNode } from 'vue'
 import type { PropValidator } from 'vue/types/options'
 
 // Components
+import CalendarHead from './CalendarHead'
 import CalendarTable from './CalendarTable'
 
 export default Vue.extend({
@@ -25,7 +26,16 @@ export default Vue.extend({
   },
   methods: {
     genCalendarHead (): VNode {
-      return this.$createElement()
+      return this.$createElement(CalendarHead, {
+        props: {
+          value: this.value
+        },
+        on: {
+          input: (value: Date) => {
+            this.$emit('input', value)
+          }
+        }
+      })
     },
     genCalendarBody (): VNode {
       return this.$createElement(CalendarTable, {
