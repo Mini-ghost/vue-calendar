@@ -9,6 +9,10 @@ import CalendarTable from './CalendarTable'
 
 export default Vue.extend({
   name: 'Calendar',
+  model: {
+    prop: 'value',
+    event: 'input'
+  },
   props: {
     showAdjacentMonths: {
       type: Boolean,
