@@ -64,6 +64,8 @@ export default Vue.extend({
     genBody (): VNode {
       const children: VNodeChildren = []
       let row: VNodeChildren = []
+
+      const daysInMonth = new Date(this.valueYear, this.valueMonth + 1, 0).getDate() 
       let day = new Date(this.valueYear, this.valueMonth, 1).getDay()
   
       // 產生上個月會出現在該月份日曆上的部分
@@ -84,7 +86,7 @@ export default Vue.extend({
       }
 
       // 產生這個月的日期
-      for(let i = 1; i <= 31; i++) {
+      for(let i = 1; i <= daysInMonth; i++) {
         const date = `${this.valueYear}-${fill(this.valueMonth + 1)}-${fill(i)}`
 
         row.push(this.$createElement('td', [formatter(date)]))
