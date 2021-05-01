@@ -41,7 +41,7 @@ export default Vue.extend({
     },
     value: {
       type: Date,
-      default: () => new Date()
+      required: true
     } as PropValidator<Date>
   },
 
