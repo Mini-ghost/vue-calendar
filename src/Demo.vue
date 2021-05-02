@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>{{ value }}</p>
     <Calendar 
       v-model="value"
       :show-adjacent-months="showAdjacentMonths"
