@@ -7,27 +7,8 @@ import type {
 } from 'vue'
 import type { PropValidator } from 'vue/types/options'
 
+import { fill } from '@/utils/fill'
 import { genFormatter } from '@/utils/genFormatter'
-
-const fill = (
-  string: number | string, 
-  length: number = 2, 
-  fillText: string = '0'
-): string => {
-  let stringLength: number
-
-  string = string + ''
-  fillText = fillText + ''
-
-  if ((stringLength = string.split('').length) > length) {
-    return string
-  }
-
-  const difference = length - stringLength
-  fillText = fillText.repeat(difference)
-
-  return fillText + string
-}
 
 const formatter = genFormatter('en-US', { day: 'numeric', timeZone: 'UTC' })
 
