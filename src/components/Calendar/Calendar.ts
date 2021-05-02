@@ -8,6 +8,9 @@ import type { PropValidator } from 'vue/types/options'
 import CalendarHead from './CalendarHead'
 import CalendarTable from './CalendarTable'
 
+// utils
+import { fill } from '@/utils/fill'
+
 export default Vue.extend({
   name: 'Calendar',
   model: {
@@ -24,15 +27,24 @@ export default Vue.extend({
       default: () => new Date()
     } as PropValidator<Date>
   },
+  data() {
+    const now = new Date()
+    return {
+      tableDate: (() => {
+        const date = `${now.getFullYear()}-${fill(now.getMonth() + 1)}`
+        return date
+      })()
+    }
+  },
   methods: {
     genCalendarHead (): VNode {
       return this.$createElement(CalendarHead, {
         props: {
-          value: this.value
+          value: this.tableDate
         },
         on: {
-          input: (value: Date) => {
-            this.$emit('input', value)
+          input: (value: string) => {
+            this.tableDate = value
           }
         }
       })
@@ -41,7 +53,13 @@ export default Vue.extend({
       return this.$createElement(CalendarTable, {
         props: {
           showAdjacentMonths: this.showAdjacentMonths,
+          tableDate: this.tableDate,
           value: this.value
+        },
+        on: {
+          input: (value: Date) => {
+            this.$emit('input', value)
+          }
         }
       })
     }

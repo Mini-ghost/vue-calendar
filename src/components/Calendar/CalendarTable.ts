@@ -20,6 +20,10 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
+    tableDate: {
+      type: String,
+      required: true
+    } as PropValidator<string>,
     value: {
       type: Date,
       required: true
@@ -27,6 +31,12 @@ export default Vue.extend({
   },
 
   computed: {
+    tableYear() {
+      return Number(this.tableDate.split('-')[0])
+    },
+    tableMonth() {
+      return Number(this.tableDate.split('-')[1]) - 1
+    },
     valueYear() {
       return this.value.getFullYear()
     },
@@ -36,6 +46,15 @@ export default Vue.extend({
   },
 
   methods: {
+    genButton(date: string | Date): VNode {
+      return this.$createElement('button', {
+        on: {
+          click: () => {
+            this.$emit('input', new Date(date))
+          }
+        }
+      }, [formatter(date)])
+    },
     genHead (): VNode {
       const row = this.genTr(['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => {
         return this.$createElement('th', [day])
@@ -46,31 +65,31 @@ export default Vue.extend({
       const children: VNodeChildren = []
       let row: VNodeChildren = []
 
-      const daysInMonth = new Date(this.valueYear, this.valueMonth + 1, 0).getDate() 
-      let day = new Date(this.valueYear, this.valueMonth, 1).getDay()
+      const daysInMonth = new Date(this.tableYear, this.tableMonth + 1, 0).getDate() 
+      let day = new Date(this.tableYear, this.tableMonth, 1).getDay()
   
       // 產生上個月會出現在該月份日曆上的部分
-      const prevMonthYear = this.valueMonth ? this.valueYear : this.valueYear - 1
-      const prevMonth = (this.valueMonth + 11) % 12
+      const prevMonthYear = this.tableMonth ? this.tableYear : this.tableYear - 1
+      const prevMonth = (this.tableMonth + 11) % 12
 
       const lastDateOfPreviousMonth = new Date(
-        this.valueYear, 
-        this.valueMonth, 0
+        this.tableYear, 
+        this.tableMonth, 0
       ).getDate()
 
       while(day--) {
         const date = `${prevMonthYear}-${fill(prevMonth + 1)}-${lastDateOfPreviousMonth - day}`
         row.push(this.$createElement('td', this.showAdjacentMonths 
-          ? [formatter(date)] 
+          ? [this.genButton(date)]
           : []
         ))
       }
 
       // 產生這個月的日期
       for(let i = 1; i <= daysInMonth; i++) {
-        const date = `${this.valueYear}-${fill(this.valueMonth + 1)}-${fill(i)}`
+        const date = `${this.tableYear}-${fill(this.tableMonth + 1)}-${fill(i)}`
 
-        row.push(this.$createElement('td', [formatter(date)]))
+        row.push(this.$createElement('td', [this.genButton(date)]))
 
         if(row.length === 7) {
           children.push(this.genTr(row))
@@ -79,17 +98,17 @@ export default Vue.extend({
       }
 
       // 產生下個月會出現在該月份日曆上的部分
-      const nextMonthYear = this.valueMonth === 11 
-        ? this.valueYear + 1 
-        : this.valueYear
+      const nextMonthYear = this.tableMonth === 11 
+        ? this.tableYear + 1 
+        : this.tableYear
 
-      const nextMonth = (this.valueMonth + 1) % 12
+      const nextMonth = (this.tableMonth + 1) % 12
       let nextMonthDay = 1
 
       while (row.length < 7) {
         const date = `${nextMonthYear}-${fill(nextMonth + 1)}-${fill(nextMonthDay++)}`
         row.push(this.$createElement('td', this.showAdjacentMonths 
-          ? [formatter(date)] 
+          ? [this.genButton(date)] 
           : []
         ))
       }

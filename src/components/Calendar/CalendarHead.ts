@@ -4,6 +4,7 @@ import Vue from 'vue'
 import type { VNode } from 'vue'
 import type { PropValidator } from 'vue/types/options'
 
+import { fill } from '@/utils/fill'
 import { genFormatter } from '@/utils/genFormatter'
 
 const formatter = genFormatter('en-US', {
@@ -15,18 +16,18 @@ export default Vue.extend({
   name: 'CalendarHead',
   props: {
     value: {
-      type: Date,
+      type: String,
       required: true
-    } as PropValidator<Date>
+    } as PropValidator<string>
   },
 
   computed: {
     valueYear() {
-      return this.value.getFullYear()
+      return Number(this.value.split('-')[0])
     },
     valueMonth() {
-      return this.value.getMonth()
-    }
+      return Number(this.value.split('-')[1]) - 1
+    },
   },
 
   methods: {
@@ -53,7 +54,8 @@ export default Vue.extend({
               month = (this.valueMonth + 11) % 12
             }
 
-            this.$emit('input', new Date(year, month))
+            const date = `${year}-${fill(month + 1)}`
+            this.$emit('input', date)
           }
         }
       }, [change > 0 ? 'Next' : 'Prev'])
