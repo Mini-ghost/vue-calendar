@@ -30,6 +30,7 @@ export default Vue.extend({
   data() {
     const now = new Date()
     return {
+      now,
       tableDate: (() => {
         const date = `${now.getFullYear()}-${fill(now.getMonth() + 1)}`
         return date
@@ -50,8 +51,13 @@ export default Vue.extend({
       })
     },
     genCalendarBody (): VNode {
+      const { now } = this
+      const current = 
+        `${now.getFullYear()}-${fill(now.getMonth() + 1)}-${fill(now.getDate())}`
+
       return this.$createElement(CalendarTable, {
         props: {
+          current,
           showAdjacentMonths: this.showAdjacentMonths,
           tableDate: this.tableDate,
           value: this.value

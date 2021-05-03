@@ -16,6 +16,10 @@ export default Vue.extend({
   name: 'CalendarTable',
 
   props: {
+    current: {
+      type: String,
+      required: true
+    },
     showAdjacentMonths: {
       type: Boolean,
       default: false
@@ -47,7 +51,12 @@ export default Vue.extend({
 
   methods: {
     genButton(date: string | Date): VNode {
+      const isCurrent = this.current === date
       return this.$createElement('button', {
+        class: {
+          // TODO: 制定 Class 命名規則
+          'current': isCurrent
+        },
         on: {
           click: () => {
             this.$emit('input', new Date(date))
