@@ -3,7 +3,8 @@
     <p>{{ value }}</p>
     <Calendar 
       v-model="value"
-      :show-adjacent-months="showAdjacentMonths"
+      show-adjacent-months
+      update-by-scroll
     />
   </div>
 </template>
@@ -21,8 +22,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      value: new Date(),
-      showAdjacentMonths: false,
+      value: new Date()
     }
   }
 })
