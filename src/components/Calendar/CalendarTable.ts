@@ -28,6 +28,10 @@ export default Vue.extend({
       type: String,
       required: true
     } as PropValidator<string>,
+    updateByScroll: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: Date,
       required: true
@@ -50,6 +54,25 @@ export default Vue.extend({
   },
 
   methods: {
+    onWheel (e: WheelEvent) {
+      e.stopPropagation()
+
+      let year: number
+      let month: number
+      if (e.deltaY > 0) {
+        year = this.tableMonth === 11
+          ? this.tableYear + 1
+          : this.tableYear
+        
+        month = (this.tableMonth + 1) % 12
+
+      } else {
+        year = this.tableMonth ? this.tableYear - 1 : this.tableYear
+        month = (this.tableMonth + 11) % 12
+      }
+        
+      this.$emit('update:table-date', `${year}-${fill(month + 1)}`)
+    },
     genButton(date: string | Date): VNode {
       const isCurrent = this.current === date
       return this.$createElement('button', {
@@ -133,7 +156,11 @@ export default Vue.extend({
 
   render (): VNode {
     return this.$createElement('table', {
-
+      on: this.updateByScroll
+        ? {
+          wheel: this.onWheel
+        }
+        : undefined
     }, [
       this.genHead(),
       this.genBody()

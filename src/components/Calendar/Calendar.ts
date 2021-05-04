@@ -22,6 +22,10 @@ export default Vue.extend({
       type: Boolean,
       default: false
     },
+    updateByScroll: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: Date,
       default: () => new Date()
@@ -60,12 +64,14 @@ export default Vue.extend({
           current,
           showAdjacentMonths: this.showAdjacentMonths,
           tableDate: this.tableDate,
+          updateByScroll: this.updateByScroll,
           value: this.value
         },
         on: {
           input: (value: Date) => {
             this.$emit('input', value)
-          }
+          },
+          'update:table-date': (value: string) => this.tableDate = value 
         }
       })
     }
