@@ -79,7 +79,7 @@ export default Vue.extend({
         month = (this.tableMonth + 1) % 12
 
       } else {
-        year = this.tableMonth ? this.tableYear - 1 : this.tableYear
+        year = this.tableMonth ? this.tableYear : this.tableYear - 1
         month = (this.tableMonth + 11) % 12
       }
         
