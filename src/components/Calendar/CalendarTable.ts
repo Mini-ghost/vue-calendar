@@ -9,7 +9,9 @@ import type { PropValidator } from 'vue/types/options'
 
 import { fill } from '@/utils/fill'
 import { genFormatter } from '@/utils/genFormatter'
+import { throttle } from '@/utils/throttle'
 
+const noop = () => {}
 const formatter = genFormatter('en-US', { day: 'numeric', timeZone: 'UTC' })
 
 export default Vue.extend({
@@ -38,6 +40,12 @@ export default Vue.extend({
     } as PropValidator<Date>
   },
 
+  data() {
+    return {
+      wheelThrottle: null as null |  ((e: WheelEvent) => void)
+    }
+  },
+
   computed: {
     tableYear() {
       return Number(this.tableDate.split('-')[0])
@@ -51,6 +59,10 @@ export default Vue.extend({
     valueMonth() {
       return this.value.getMonth()
     }
+  },
+
+  created () {
+    this.wheelThrottle = throttle(this.onWheel, 250)
   },
 
   methods: {
@@ -158,7 +170,11 @@ export default Vue.extend({
     return this.$createElement('table', {
       on: this.updateByScroll
         ? {
-          wheel: this.onWheel
+          /**
+           * @see https://github.com/vuetifyjs/vuetify/issues/5546 [Bug Report] Datepicker scroll is way too sensitive on mac
+           * @see https://github.com/vuetifyjs/vuetify/pull/11372 fix(VDatePicker): throttle scroll with using scrollable prop 
+           */
+          wheel: this.wheelThrottle || noop
         }
         : undefined
     }, [
