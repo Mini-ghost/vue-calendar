@@ -35,9 +35,9 @@ export default Vue.extend({
       default: false
     },
     value: {
-      type: Date,
+      type: [String, Array],
       required: true
-    } as PropValidator<Date>
+    }
   },
 
   data() {
@@ -53,12 +53,6 @@ export default Vue.extend({
     tableMonth() {
       return Number(this.tableDate.split('-')[1]) - 1
     },
-    valueYear() {
-      return this.value.getFullYear()
-    },
-    valueMonth() {
-      return this.value.getMonth()
-    }
   },
 
   created () {
@@ -94,7 +88,7 @@ export default Vue.extend({
         },
         on: {
           click: () => {
-            this.$emit('input', new Date(date))
+            this.$emit('input', date)
           }
         }
       }, [formatter(date)])

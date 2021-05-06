@@ -27,9 +27,9 @@ export default Vue.extend({
       default: false
     },
     value: {
-      type: Date,
-      default: () => new Date()
-    } as PropValidator<Date>
+      type: [String, Array],
+      required: true
+    }
   },
   data() {
     const now = new Date()
