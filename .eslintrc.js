@@ -26,7 +26,7 @@ module.exports = {
 
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
-    "@typescript-eslint/no-empty-function": "off",
+    '@typescript-eslint/no-empty-function': 'off',
 
     'vue/html-self-closing': 'error',
     'vue/html-closing-bracket-newline': 'error',
@@ -41,7 +41,7 @@ module.exports = {
       }
     ],
     'vue/singleline-html-element-content-newline': ['error'],
-    'vue/multiline-html-element-content-newline': ["error"]
+    'vue/multiline-html-element-content-newline': ['error']
   },
   overrides: [
     {
