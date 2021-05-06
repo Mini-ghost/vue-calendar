@@ -11,7 +11,7 @@ import CalendarTable from './CalendarTable'
 // utils
 import { fill } from '@/utils/fill'
 
-type SelectMode = 'single' | 'multiple'
+type SelectMode = 'single' | 'multiple' | 'range'
 
 export default Vue.extend({
   name: 'Calendar',
@@ -56,6 +56,16 @@ export default Vue.extend({
   },
   methods: {
     onDateClick (value: string) {
+      if (this.selectMode === 'range') {
+        if(this.multipleValue.length !== 1) {
+          this.$emit('input', [value])
+        } else {
+          const output = [this.multipleValue[0], value]
+          this.$emit('input', output)
+          this.$emit('change', output)
+        }
+        return
+      }
 
       const output = this.selectMode === 'multiple'
         ? this.multipleValue.indexOf(value) === -1
