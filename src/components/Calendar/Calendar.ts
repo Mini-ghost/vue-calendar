@@ -113,7 +113,7 @@ export default Vue.extend({
   },
   render (): VNode {
     return this.$createElement('div', {
-      staticClass: 'w-290px p-3'
+      staticClass: 'w-290px p-3 border border-gray-200 rounded-lg'
     },[
       this.genCalendarHead(),
       this.genCalendarBody()

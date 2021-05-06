@@ -44,7 +44,7 @@ export default Vue.extend({
       const icon = change > 0 ? IconRight : IconLeft
 
       return this.$createElement('button', {
-        staticClass: 'w-8 h-8 rounded-full border-transparent hover:border-blue-100',
+        staticClass: 'w-8 h-8 bg-transparent hover:bg-gray-200 rounded-full border-transparent hover:border-blue-100 cursor-pointer',
         on: {
           click: (e: Event) => {
             e.stopPropagation()
@@ -72,7 +72,7 @@ export default Vue.extend({
   },  
   render (): VNode {
     return this.$createElement('div', {
-      staticClass: 'flex items-center'
+      staticClass: 'flex items-center py-1'
     }, [
       this.genBtn(-1),
       this.genHeader(),

@@ -6,6 +6,9 @@ export default defineConfig({
     extend: {
       width: {
         'w-290px': '290px'
+      },
+      height: {
+        'h-246px': '246px'
       }
     }
   }

@@ -94,16 +94,23 @@ export default Vue.extend({
         
       this.$emit('update:table-date', `${year}-${fill(month + 1)}`)
     },
-    genButton(date: string): VNode {
+    genButton(date: string, isThisMonth: boolean = false): VNode {
       const isCurrent = this.current === date
       const isSelected = this.isSelected(date)
+
       return this.$createElement('button', {
-        staticClass: 'w-8 h-8 rounded-full border-2',
+        staticClass: 'w-8 h-8 rounded-full border select-none',
         class: {
+          'bg-transparent text-gray-300': !isThisMonth,
+          'cursor-pointer': isThisMonth,
           'border-transparent': !isCurrent,
           'border-blue-500': isCurrent,
-          'bg-transparent': !isSelected,
-          'bg-blue-500 text-white': isSelected
+          'bg-transparent hover:bg-blue-500 hover:bg-opacity-25': !isSelected && isThisMonth,
+          'bg-blue-500 text-white hover:bg-opacity-100': isSelected
+        },
+        domProps: {
+          type: 'button',
+          disabled: !isThisMonth
         },
         on: {
           click: () => {
@@ -111,6 +118,14 @@ export default Vue.extend({
           }
         }
       }, [formatter(date)])
+    },
+    genTable () {
+      return this.$createElement('table', {
+        staticClass: 'w-full table-fixed',
+      }, [
+        this.genHead(),
+        this.genBody()
+      ])
     },
     genHead (): VNode {
       const row = this.genTr(['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => {
@@ -146,7 +161,7 @@ export default Vue.extend({
       for(let i = 1; i <= daysInMonth; i++) {
         const date = `${this.tableYear}-${fill(this.tableMonth + 1)}-${fill(i)}`
 
-        row.push(this.$createElement('td', [this.genButton(date)]))
+        row.push(this.$createElement('td', [this.genButton(date, true)]))
 
         if(row.length === 7) {
           children.push(this.genTr(row))
@@ -180,8 +195,8 @@ export default Vue.extend({
   },
 
   render (): VNode {
-    return this.$createElement('table', {
-      staticClass: 'w-full table-fixed',
+    return this.$createElement('div', {
+      staticClass: 'h-246px',
       on: this.updateByScroll
         ? {
           /**
@@ -192,8 +207,7 @@ export default Vue.extend({
         }
         : undefined
     }, [
-      this.genHead(),
-      this.genBody()
+      this.genTable()
     ])
   }
 })
