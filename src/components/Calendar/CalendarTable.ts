@@ -22,6 +22,10 @@ export default Vue.extend({
       type: String,
       required: true
     },
+    isRange: {
+      type: Boolean,
+      default: false
+    },
     showAdjacentMonths: {
       type: Boolean,
       default: false
@@ -37,7 +41,7 @@ export default Vue.extend({
     value: {
       type: [String, Array],
       required: true
-    }
+    } as PropValidator<string | string[]>
   },
 
   data() {
@@ -60,6 +64,17 @@ export default Vue.extend({
   },
 
   methods: {
+    isSelected (value: string) {
+      if(Array.isArray(this.value)) {
+        if(this.isRange && this.value.length === 2) {
+          const [from, to] = this.value.slice().sort()
+          return from <= value && to >= value
+        }
+        return this.value.includes(value)
+      }
+
+      return this.value === value
+    },
     onWheel (e: WheelEvent) {
       e.stopPropagation()
 
@@ -79,12 +94,13 @@ export default Vue.extend({
         
       this.$emit('update:table-date', `${year}-${fill(month + 1)}`)
     },
-    genButton(date: string | Date): VNode {
+    genButton(date: string): VNode {
       const isCurrent = this.current === date
       return this.$createElement('button', {
         class: {
           // TODO: 制定 Class 命名規則
-          'current': isCurrent
+          'current': isCurrent,
+          'selected': this.isSelected(date)
         },
         on: {
           click: () => {

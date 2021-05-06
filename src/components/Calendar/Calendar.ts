@@ -95,6 +95,7 @@ export default Vue.extend({
       return this.$createElement(CalendarTable, {
         props: {
           current,
+          isRange: this.selectMode === 'range',
           showAdjacentMonths: this.showAdjacentMonths,
           tableDate: this.tableDate,
           updateByScroll: this.updateByScroll,
