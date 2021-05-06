@@ -22,7 +22,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      value: new Date()
+      value: '2021-05-01'
     }
   }
 })
