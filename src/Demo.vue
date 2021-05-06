@@ -3,37 +3,44 @@
     <!-- Dashboard -->
     <div class="flex border border-gary-300 p-3 rounded-lg">
       <div class="p-2">
-        <label class="pr-2">showAdjacentMonths</label>
-        <input 
-          v-model="showAdjacentMonths"
-          type="checkbox"
-        >
-      </div>
-
-      <div class="p-2">
-        <label class="pr-2">updataByScroll</label>
-        <input 
-          v-model="updataByScroll"
-          type="checkbox"
-        >
-      </div>
-
-      <div class="p-2">
-        <label class="pr-2">selectMode</label>
-        <select v-model="selectMode">
-          <option
-            v-for="option in modeOptions"
-            :key="option"
-            :value="option"
+        <label>
+          <span class="pr-2">showAdjacentMonths</span>
+          <input 
+            v-model="showAdjacentMonths"
+            type="checkbox"
           >
-            {{ option }}
-          </option>
-        </select>
+        </label>
+      </div>
+
+      <div class="p-2">
+        <label>
+          <span class="pr-2">updataByScroll</span>
+          <input 
+            v-model="updataByScroll"
+            type="checkbox"
+          >
+        </label>
+      </div>
+
+      <div class="p-2">
+        <label>
+          <span class="pr-2">selectMode</span>
+          <select v-model="selectMode">
+            <option
+              v-for="option in modeOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </label>
       </div>
     </div>
 
-    <calendar 
+    <calendar
       v-model="value"
+      class="my-4"
       :show-adjacent-months="showAdjacentMonths"
       :update-by-scroll="updataByScroll"
       :select-mode="selectMode"
@@ -54,11 +61,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      value: '2021-05-01',
+      value: '2021-05-01' as string | string[],
       showAdjacentMonths: false,
       updataByScroll: false,
       selectMode: 'single',
       modeOptions: ['single', 'multiple', 'range']
+    }
+  },
+  watch: {
+    selectMode(mode: 'single' | 'multiple' | 'range') {
+      this.value = mode === 'range'
+        ? [] as string[]
+        : '2021-05-01'
     }
   }
 })
