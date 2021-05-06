@@ -11,6 +11,8 @@ import CalendarTable from './CalendarTable'
 // utils
 import { fill } from '@/utils/fill'
 
+type SelectMode = 'single' | 'multiple'
+
 export default Vue.extend({
   name: 'Calendar',
   model: {
@@ -18,6 +20,10 @@ export default Vue.extend({
     event: 'input'
   },
   props: {
+    selectMode: {
+      type: String,
+      default: 'single'
+    } as PropValidator<SelectMode>,
     showAdjacentMonths: {
       type: Boolean,
       default: false
@@ -29,7 +35,7 @@ export default Vue.extend({
     value: {
       type: [String, Array],
       required: true
-    }
+    } as PropValidator<string | string[]>
   },
   data() {
     const now = new Date()
@@ -41,7 +47,24 @@ export default Vue.extend({
       })()
     }
   },
+  computed: {
+    multipleValue () {
+      return this.value 
+        ? Array.isArray(this.value) ? this.value : [this.value]
+        : []
+    }
+  },
   methods: {
+    onDateClick (value: string) {
+
+      const output = this.selectMode === 'multiple'
+        ? this.multipleValue.indexOf(value) === -1
+          ? this.multipleValue.concat(value)
+          : this.multipleValue.filter(v => v !== value)
+        : value
+
+      this.$emit('input', output)
+    },
     genCalendarHead (): VNode {
       return this.$createElement(CalendarHead, {
         props: {
@@ -68,9 +91,7 @@ export default Vue.extend({
           value: this.value
         },
         on: {
-          input: (value: Date) => {
-            this.$emit('input', value)
-          },
+          input: this.onDateClick,
           'update:table-date': (value: string) => this.tableDate = value 
         }
       })
