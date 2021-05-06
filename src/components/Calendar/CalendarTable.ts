@@ -96,11 +96,14 @@ export default Vue.extend({
     },
     genButton(date: string): VNode {
       const isCurrent = this.current === date
+      const isSelected = this.isSelected(date)
       return this.$createElement('button', {
+        staticClass: 'w-8 h-8 rounded-full border-2',
         class: {
-          // TODO: 制定 Class 命名規則
-          'current': isCurrent,
-          'selected': this.isSelected(date)
+          'border-transparent': !isCurrent,
+          'border-blue-500': isCurrent,
+          'bg-transparent': !isSelected,
+          'bg-blue-500 text-white': isSelected
         },
         on: {
           click: () => {
@@ -178,6 +181,7 @@ export default Vue.extend({
 
   render (): VNode {
     return this.$createElement('table', {
+      staticClass: 'w-full table-fixed',
       on: this.updateByScroll
         ? {
           /**

@@ -1,5 +1,9 @@
 import Vue from 'vue'
 
+// Icon
+import IconRight from './IconRight.svg?inline'
+import IconLeft from './IconLeft.svg?inline'
+
 // Types
 import type { VNode } from 'vue'
 import type { PropValidator } from 'vue/types/options'
@@ -32,10 +36,15 @@ export default Vue.extend({
 
   methods: {
     genHeader(): VNode {
-      return this.$createElement('span', [formatter(this.value)])
+      return this.$createElement('span', {
+        staticClass: 'flex-1 text-center'
+      }, [formatter(this.value)])
     },
     genBtn(change: number): VNode {
+      const icon = change > 0 ? IconRight : IconLeft
+
       return this.$createElement('button', {
+        staticClass: 'w-8 h-8 rounded-full border-transparent hover:border-blue-100',
         on: {
           click: (e: Event) => {
             e.stopPropagation()
@@ -58,12 +67,12 @@ export default Vue.extend({
             this.$emit('input', date)
           }
         }
-      }, [change > 0 ? 'Next' : 'Prev'])
+      }, [this.$createElement(icon)])
     }
   },  
   render (): VNode {
     return this.$createElement('div', {
-
+      staticClass: 'flex items-center'
     }, [
       this.genBtn(-1),
       this.genHeader(),

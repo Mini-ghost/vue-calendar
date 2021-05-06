@@ -11,6 +11,9 @@ import CalendarTable from './CalendarTable'
 // utils
 import { fill } from '@/utils/fill'
 
+// CSS
+import 'windi.css'
+
 type SelectMode = 'single' | 'multiple' | 'range'
 
 export default Vue.extend({
@@ -109,7 +112,9 @@ export default Vue.extend({
     }
   },
   render (): VNode {
-    return this.$createElement('div', [
+    return this.$createElement('div', {
+      staticClass: 'w-290px p-3'
+    },[
       this.genCalendarHead(),
       this.genCalendarBody()
     ])
