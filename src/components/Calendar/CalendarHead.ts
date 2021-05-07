@@ -25,7 +25,18 @@ export default Vue.extend({
     } as PropValidator<string>
   },
 
+  data () {
+    return {
+      isReversing: false,
+    }
+  },
+
   computed: {
+    // Annotating Return Types
+    // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+    computedTransition (): string {
+      return this.isReversing ? 'transition-reversing-slide' : 'transition-slide'
+    },
     valueYear() {
       return Number(this.value.split('-')[0])
     },
@@ -34,11 +45,28 @@ export default Vue.extend({
     },
   },
 
+  watch: {
+    value (value: string, oldValue: string) {
+      this.isReversing = value < oldValue
+    }
+  },
+
   methods: {
     genHeader(): VNode {
-      return this.$createElement('span', {
-        staticClass: 'flex-1 text-center'
+      const title = this.$createElement('div', {
+        key: this.value,
+        staticClass: 'text-center w-full duration-300'
       }, [formatter(this.value)])
+
+      const transition = this.$createElement('transition', {
+        props: {
+          name: this.computedTransition
+        }
+      }, [title])
+      
+      return this.$createElement('div', {
+        staticClass: 'flex-1 flex relative overflow-hidden'
+      }, [transition])
     },
     genBtn(change: number): VNode {
       const icon = change > 0 ? IconRight : IconLeft
@@ -72,7 +100,7 @@ export default Vue.extend({
   },  
   render (): VNode {
     return this.$createElement('div', {
-      staticClass: 'flex items-center py-1'
+      staticClass: 'flex relative items-center py-2'
     }, [
       this.genBtn(-1),
       this.genHeader(),
