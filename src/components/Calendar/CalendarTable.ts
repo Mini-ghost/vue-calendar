@@ -57,6 +57,9 @@ export default Vue.extend({
     tableMonth() {
       return Number(this.tableDate.split('-')[1]) - 1
     },
+    daysInMonth(): number {
+      return new Date(this.tableYear, this.tableMonth + 1, 0).getDate()
+    }
   },
 
   created () {
@@ -137,7 +140,6 @@ export default Vue.extend({
       const children: VNodeChildren = []
       let row: VNodeChildren = []
 
-      const daysInMonth = new Date(this.tableYear, this.tableMonth + 1, 0).getDate() 
       let day = new Date(this.tableYear, this.tableMonth, 1).getDay()
   
       // 產生上個月會出現在該月份日曆上的部分
@@ -158,7 +160,7 @@ export default Vue.extend({
       }
 
       // 產生這個月的日期
-      for(let i = 1; i <= daysInMonth; i++) {
+      for(let i = 1; i <= this.daysInMonth; i++) {
         const date = `${this.tableYear}-${fill(this.tableMonth + 1)}-${fill(i)}`
 
         row.push(this.$createElement('td', [this.genButton(date, true)]))
