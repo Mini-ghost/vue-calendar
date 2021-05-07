@@ -14,6 +14,8 @@ import { throttle } from '@/utils/throttle'
 const noop = () => {}
 const formatter = genFormatter('en-US', { day: 'numeric', timeZone: 'UTC' })
 
+const createRange = (length: number) => Array.from(({ length }), (_, id) => id)
+
 export default Vue.extend({
   name: 'CalendarTable',
 
@@ -21,6 +23,10 @@ export default Vue.extend({
     current: {
       type: String,
       required: true
+    },
+    firstDayOfWeek: {
+      type: Number,
+      default: 0
     },
     isRange: {
       type: Boolean,
@@ -59,6 +65,11 @@ export default Vue.extend({
     },
     daysInMonth(): number {
       return new Date(this.tableYear, this.tableMonth + 1, 0).getDate()
+    },
+    weekDays () {
+      const first = this.firstDayOfWeek
+      return createRange(7)
+        .map(id => (['S', 'M', 'T', 'W', 'T', 'F', 'S'])[(id + first) % 7])
     }
   },
 
@@ -131,7 +142,7 @@ export default Vue.extend({
       ])
     },
     genHead (): VNode {
-      const row = this.genTr(['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => {
+      const row = this.genTr(this.weekDays.map(day => {
         return this.$createElement('th', [day])
       }))
       return this.$createElement('thead', row)
@@ -141,6 +152,9 @@ export default Vue.extend({
       let row: VNodeChildren = []
 
       let day = new Date(this.tableYear, this.tableMonth, 1).getDay()
+      day = (day - this.firstDayOfWeek + 7) % 7
+
+      if(day < 0) { Math.abs(day) } 
   
       // 產生上個月會出現在該月份日曆上的部分
       const prevMonthYear = this.tableMonth ? this.tableYear : this.tableYear - 1

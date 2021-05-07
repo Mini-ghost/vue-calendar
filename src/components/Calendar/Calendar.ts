@@ -14,6 +14,8 @@ import { fill } from '@/utils/fill'
 // CSS
 import 'windi.css'
 
+declare function parseInt(s: string | number, radix?: number): number;
+
 type SelectMode = 'single' | 'multiple' | 'range'
 
 export default Vue.extend({
@@ -23,6 +25,10 @@ export default Vue.extend({
     event: 'input'
   },
   props: {
+    firstDayOfWeek: {
+      type: [String, Number],
+      default: 0
+    },
     selectMode: {
       type: String,
       default: 'single'
@@ -55,6 +61,9 @@ export default Vue.extend({
       return this.value 
         ? Array.isArray(this.value) ? this.value : [this.value]
         : []
+    },
+    computedFirstDayOfWeek () {
+      return parseInt(Number(this.firstDayOfWeek) % 7, 10)
     }
   },
   methods: {
@@ -98,6 +107,7 @@ export default Vue.extend({
       return this.$createElement(CalendarTable, {
         props: {
           current,
+          firstDayOfWeek: this.computedFirstDayOfWeek,
           isRange: this.selectMode === 'range',
           showAdjacentMonths: this.showAdjacentMonths,
           tableDate: this.tableDate,
