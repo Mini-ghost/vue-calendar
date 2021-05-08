@@ -1,8 +1,8 @@
 import Vue from 'vue'
 
 // Icon
-import IconRight from './IconRight.svg?inline'
-import IconLeft from './IconLeft.svg?inline'
+import IconRight from './../Icon/IconRight.svg?inline'
+import IconLeft from './../Icon/IconLeft.svg?inline'
 
 // Types
 import type { VNode } from 'vue'
