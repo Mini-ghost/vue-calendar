@@ -1,4 +1,4 @@
-declare module '*.svg?inline' {
+declare module '*.svg' {
   import Vue from 'vue'
   export default Vue
 }
