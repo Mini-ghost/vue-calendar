@@ -13,6 +13,7 @@ import { fill } from '@/utils/fill'
 
 // CSS
 import 'windi.css'
+import '@/assets/transition.scss'
 
 declare function parseInt(s: string | number, radix?: number): number;
 
@@ -123,7 +124,7 @@ export default Vue.extend({
   },
   render (): VNode {
     return this.$createElement('div', {
-      staticClass: 'w-290px p-3 border border-gray-200 rounded-lg'
+      staticClass: 'w-290px px-3 py-2 border border-gray-200 rounded-lg overflow-hidden'
     },[
       this.genCalendarHead(),
       this.genCalendarBody()

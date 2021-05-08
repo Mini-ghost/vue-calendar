@@ -50,13 +50,19 @@ export default Vue.extend({
     } as PropValidator<string | string[]>
   },
 
-  data() {
+  data () {
     return {
+      isReversing: false,
       wheelThrottle: null as null |  ((e: WheelEvent) => void)
     }
   },
 
   computed: {
+    // Annotating Return Types
+    // https://vuejs.org/v2/guide/typescript.html#Annotating-Return-Types
+    computedTransition (): string {
+      return this.isReversing ? 'transition-reversing-slide' : 'transition-slide'
+    },
     tableYear() {
       return Number(this.tableDate.split('-')[0])
     },
@@ -70,6 +76,12 @@ export default Vue.extend({
       const first = this.firstDayOfWeek
       return createRange(7)
         .map(id => (['S', 'M', 'T', 'W', 'T', 'F', 'S'])[(id + first) % 7])
+    }
+  },
+
+  watch: {
+    tableDate (value: string, oldValue: string) {
+      this.isReversing = value < oldValue
     }
   },
 
@@ -135,7 +147,8 @@ export default Vue.extend({
     },
     genTable () {
       return this.$createElement('table', {
-        staticClass: 'w-full table-fixed',
+        key: this.tableDate,
+        staticClass: 'w-full table-fixed duration-300'
       }, [
         this.genHead(),
         this.genBody()
@@ -211,8 +224,14 @@ export default Vue.extend({
   },
 
   render (): VNode {
+    const transition = this.$createElement('transition', {
+      props: {
+        name: this.computedTransition
+      }
+    }, [this.genTable()])
+
     return this.$createElement('div', {
-      staticClass: 'h-246px',
+      staticClass: 'relative h-246px',
       on: this.updateByScroll
         ? {
           /**
@@ -222,8 +241,6 @@ export default Vue.extend({
           wheel: this.wheelThrottle || noop
         }
         : undefined
-    }, [
-      this.genTable()
-    ])
+    }, [transition])
   }
 })
