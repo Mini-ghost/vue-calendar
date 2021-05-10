@@ -16,16 +16,6 @@ describe('CalendarHead.ts', () => {
     }
   })
 
-  it('should render component and match snapshot', () => {
-    const wrapper = mountFunction({
-      propsData: {
-        value: '2021-05',
-      },
-    })
-
-    expect(wrapper.html()).toMatchSnapshot()
-  })
-
   it('should trigger event on arrows click', () => {
     const wrapper = mountFunction({
       propsData: {
